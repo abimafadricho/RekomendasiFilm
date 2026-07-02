@@ -10,8 +10,7 @@
         </div>
 
         <div class="p-4 rounded-3" style="background:var(--bg-card);border:1px solid var(--border)">
-            <form action="{{ route('rekomendasi.show', '') }}" method="GET"
-                  id="formRekomendasi">
+            <form  method="GET" id="formRekomendasi" onsubmit="return false;">
 
                 <div class="mb-3">
                     <label class="form-label text-muted">User ID</label>

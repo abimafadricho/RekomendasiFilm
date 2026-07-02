@@ -22,7 +22,7 @@
     <div class="col-6 col-md-3">
         <div class="p-4 rounded-3 text-center" style="background:var(--bg-card);border:1px solid var(--border)">
             <i class="bi bi-{{ $stat['icon'] }}" style="font-size:2rem;color:{{ $stat['color'] }}"></i>
-            <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-top:0.5rem">
+            <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-top:0.5rem;color:#ffffff !important">
                 {{ $stat['value'] }}
             </div>
             <small class="text-muted">{{ $stat['label'] }}</small>
@@ -43,7 +43,7 @@
             <strong>{{ number_format($apiStatus['n_users'] ?? 0) }}</strong>
         </div>
         <div class="col-md-3">
-            <small class="text-muted d-block">Total Film Training</small>
+            <small  class="text-muted d-block">Total Film Training</small>
             <strong>{{ number_format($apiStatus['n_movies'] ?? 0) }}</strong>
         </div>
         <div class="col-md-3">

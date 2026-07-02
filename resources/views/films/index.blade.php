@@ -4,7 +4,7 @@
 @section('content')
 
 {{-- Header --}}
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
     <div>
         <h1 class="section-title">Top 10 Film <span>Terpopuler</span></h1>
         <p class="text-muted mb-0">Berdasarkan rating pengguna dan relevansi waktu (timestamp)</p>
@@ -14,6 +14,62 @@
         <i class="bi bi-trophy-fill me-1"></i> Time-Decay Weighted
     </span>
 </div>
+
+{{-- Toggle Pemilihan Region --}}
+<div class="mb-4 d-flex align-items-center gap-3 flex-wrap">
+
+    <div class="region-toggle">
+        <a href="{{ route('films.index') }}?region=global"
+           class="region-toggle__option {{ $region === 'global' ? 'is-active' : '' }}">
+            <span class="region-toggle__flag">🌍</span> Global
+        </a>
+        <a href="{{ route('films.index') }}?region=indonesia"
+           class="region-toggle__option {{ $region === 'indonesia' ? 'is-active' : '' }}">
+            <span class="region-toggle__flag">🇮🇩</span> Indonesia
+        </a>
+    </div>
+</div>
+
+<style>
+    .region-toggle {
+        display: inline-flex;
+        background: var(--bg-elevated);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 4px;
+        gap: 4px;
+    }
+
+    .region-toggle__option {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 18px;
+        border-radius: 999px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: all 0.25s ease;
+        white-space: nowrap;
+    }
+
+    .region-toggle__option:hover:not(.is-active) {
+        color: var(--text-primary);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .region-toggle__option.is-active {
+        background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+        color: #fff;
+        box-shadow: 0 2px 10px rgba(230, 57, 70, 0.4);
+    }
+
+    .region-toggle__flag {
+        font-size: 1rem;
+        line-height: 1;
+    }
+</style>
 
 {{-- Info Metode
 <div class="p-3 rounded-3 mb-4 d-flex align-items-center gap-3"
@@ -34,7 +90,12 @@
     <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3">
         @foreach($topFilms as $film)
         <div class="col">
-            <div class="film-card position-relative">
+            @if(!empty($film['movie_id']))
+                <a href="{{ route('films.detail', $film['movie_id']) }}"
+                   class="film-card position-relative d-block text-decoration-none text-reset">
+            @else
+                <div class="film-card position-relative">
+            @endif
 
                 {{-- Badge Rank --}}
                 <div class="position-absolute top-0 start-0 m-2"
@@ -78,10 +139,10 @@
                     <div class="card-title">{{ $film['title'] }}</div>
 
                     <div class="d-flex justify-content-between align-items-center mt-2">
-                        <small class="text-muted">{{ $film['year'] ?? '-' }}</small>
+                        <small style="color:#ffffff">{{ $film['year'] ?? '-' }}</small>
                         <span class="rating-stars">
                             <i class="bi bi-star-fill" style="font-size:0.7rem"></i>
-                            <small>{{ number_format($film['avg_rating'], 1) }}</small>
+                            <small style="color:#ffffff">{{ number_format($film['avg_rating'], 1) }}</small>
                         </span>
                     </div>
 
@@ -100,15 +161,18 @@
                         </small>
                     </div>
 
-                    {{-- Tombol Detail --}}
+                    {{-- Indikator Detail (seluruh card sudah bisa diklik) --}}
                     @if(!empty($film['movie_id']))
-                        <a href="{{ route('films.detail', $film['movie_id']) }}"
-                           class="btn btn-accent btn-sm w-100 mt-2">
-                            <i class="bi bi-play-fill me-1"></i> Detail
-                        </a>
+                        <span class="btn btn-accent btn-sm w-100 mt-2 d-block text-center">
+                            <i class="bi bi-play-fill me-1"></i> Lihat Detail
+                        </span>
                     @endif
                 </div>
-            </div>
+            @if(!empty($film['movie_id']))
+                </a>
+            @else
+                </div>
+            @endif
         </div>
         @endforeach
     </div>
