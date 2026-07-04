@@ -14,27 +14,50 @@ class FilmController extends Controller
     }
 
     // Halaman Utama - Top 10 Film
+    // public function index(Request $request)
+    // {
+    //     // Ambil pilihan region dari dropdown (?region=indonesia), default 'global'
+    //     $region = $request->query('region', 'global');
+    //     if (!in_array($region, ['global', 'indonesia'])) {
+    //         $region = 'global';
+    //     }
+
+    //     try {
+    //         $response = Http::timeout(15)->get("{$this->apiUrl}/api/top-films", [
+    //             'region' => $region,
+    //         ]);
+    //         $data     = $response->json();
+    //         $topFilms = $data['data'] ?? [];
+    //     } catch (\Exception $e) {
+    //         $topFilms = [];
+    //         session()->flash('error', 'Gagal menghubungi server. Pastikan Flask API berjalan.');
+    //     }
+
+    //     return view('films.index', compact('topFilms', 'region'));
+    // }
+
     public function index(Request $request)
-    {
-        // Ambil pilihan region dari dropdown (?region=indonesia), default 'global'
-        $region = $request->query('region', 'global');
-        if (!in_array($region, ['global', 'indonesia'])) {
-            $region = 'global';
-        }
-
-        try {
-            $response = Http::timeout(15)->get("{$this->apiUrl}/api/top-films", [
-                'region' => $region,
-            ]);
-            $data     = $response->json();
-            $topFilms = $data['data'] ?? [];
-        } catch (\Exception $e) {
-            $topFilms = [];
-            session()->flash('error', 'Gagal menghubungi server. Pastikan Flask API berjalan.');
-        }
-
-        return view('films.index', compact('topFilms', 'region'));
+{
+    $region = $request->query('region', 'global');
+    if (!in_array($region, ['global', 'indonesia'])) {
+        $region = 'global';
     }
+
+    try {
+        // Pakai endpoint realtime, bukan /api/top-films lagi
+        $response = Http::timeout(60)->get("{$this->apiUrl}/api/top-films/realtime", [
+            'region' => $region,
+            'limit'  => 10,
+        ]);
+        $data     = $response->json();
+        $topFilms = $data['data'] ?? [];
+    } catch (\Exception $e) {
+        $topFilms = [];
+        session()->flash('error', 'Gagal menghubungi server. Pastikan Flask API berjalan.');
+    }
+
+    return view('films.index', compact('topFilms', 'region'));
+}
 
     // Halaman Detail Film
     public function detail($id)

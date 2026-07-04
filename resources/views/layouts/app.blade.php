@@ -269,31 +269,96 @@ resources/views/layouts/app.blade.php
         </button>
 
         <div class="collapse navbar-collapse" id="navMenu">
-            <ul class="navbar-nav ms-auto gap-1">
+            <ul class="navbar-nav ms-auto gap-1 align-items-center">
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('home') || request()->routeIs('films.*') ? 'active' : '' }}"
                        href="{{ route('home') }}">
                         <i class="bi bi-film me-1"></i> Film
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('rekomendasi.*') ? 'active' : '' }}"
-                       href="{{ route('rekomendasi.index') }}">
-                        <i class="bi bi-stars me-1"></i> Rekomendasi
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('rating.*') ? 'active' : '' }}"
-                       href="/rating/1">
-                        <i class="bi bi-star me-1"></i> Rating Saya
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }}"
-                       href="{{ route('admin.index') }}">
-                        <i class="bi bi-shield me-1"></i> Admin
-                    </a>
-                </li>
+
+                @if(session('user_id'))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('rekomendasi.*') ? 'active' : '' }}"
+                           href="{{ route('rekomendasi.index') }}">
+                            <i class="bi bi-stars me-1"></i> Rekomendasi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('rating.*') ? 'active' : '' }}"
+                           href="{{ route('rating.riwayat', session('user_id')) }}">
+                            <i class="bi bi-star me-1"></i> Rating Saya
+                        </a>
+                    </li>
+
+                    @if(session('user_role') === 'admin')
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }}"
+                               href="{{ route('admin.index') }}">
+                                <i class="bi bi-shield me-1"></i> Admin
+                            </a>
+                        </li>
+                    @endif
+
+                    {{-- User dropdown --}}
+                    <li class="nav-item dropdown ms-2">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+                           href="#" role="button" data-bs-toggle="dropdown">
+                            <span style="
+                                width       : 32px;
+                                height      : 32px;
+                                border-radius: 50%;
+                                background  : var(--accent);
+                                display     : flex;
+                                align-items : center;
+                                justify-content: center;
+                                font-family : 'Syne', sans-serif;
+                                font-weight : 700;
+                                font-size   : 0.85rem;
+                            ">
+                                {{ strtoupper(substr(session('user_name', 'U'), 0, 1)) }}
+                            </span>
+                            <span class="d-none d-lg-inline" style="font-size:0.9rem">
+                                {{ session('user_name') }}
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end"
+                            style="background:var(--bg-elevated);border:1px solid var(--border);min-width:180px">
+                            <li>
+                                <span class="dropdown-item-text" style="color:var(--text-muted);font-size:0.8rem">
+                                    {{ session('user_email') }}
+                                </span>
+                            </li>
+                            <li><hr class="dropdown-divider" style="border-color:var(--border)"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item"
+                                            style="color:var(--accent);font-size:0.9rem">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                @else
+                    {{-- Belum login --}}
+                    <li class="nav-item ms-2">
+                        <a href="{{ route('login') }}"
+                           class="nav-link"
+                           style="border:1px solid var(--border);border-radius:8px;padding:0.4rem 1rem">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Masuk
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('register') }}"
+                           class="nav-link"
+                           style="background:var(--accent);border-radius:8px;padding:0.4rem 1rem;color:#fff">
+                            <i class="bi bi-person-plus me-1"></i> Daftar
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
