@@ -19,7 +19,7 @@ class RatingController extends Controller
     {
         $request->validate([
             'user_id'  => 'required|integer',
-            'movie_id' => 'required|integer',
+            'movie_id' => 'required',
             'rating'   => 'required|numeric|min:0.5|max:5',
         ]);
 

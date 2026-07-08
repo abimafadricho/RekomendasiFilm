@@ -14,37 +14,39 @@ class RekomendasiController extends Controller
         $this->apiUrl = env('FLASK_API_URL', 'http://localhost:5000');
     }
 
-    // Halaman form input user_id
     public function index()
     {
-        return view('rekomendasi.index');
+         return $this->show(request());
     }
 
-    // Halaman hasil rekomendasi
-    public function show(Request $request, $userId)
+    public function show(Request $request, $user_id = null)
     {
-        $k     = $request->get('k',     20);
-        $topN  = $request->get('top_n', 10);
-
-        try {
-            $response = Http::timeout(60)->get("{$this->apiUrl}/api/recommend/{$userId}", [
-                'k'     => $k,
-                'top_n' => $topN,
-            ]);
-
-            $data          = $response->json();
-            $rekomendasi   = $data['data']    ?? [];
-            $status        = $data['status']  ?? 'error';
-            $pesan         = $data['message'] ?? '';
-
-        } catch (\Exception $e) {
-            $rekomendasi = [];
-            $status      = 'error';
-            $pesan       = 'Gagal menghubungi server. Pastikan Flask API berjalan.';
+        $region = $request->query('region', 'global');
+        if (!in_array($region, ['global', 'indonesia'])) {
+            $region = 'global';
         }
 
-        return view('rekomendasi.show', compact(
-            'rekomendasi', 'userId', 'k', 'topN', 'status', 'pesan'
-        ));
+        try {
+            // Ambil film mulai posisi 11 (offset=10)
+            $response = Http::timeout(30)->get("{$this->apiUrl}/api/top-films/realtime", [
+                'region' => $region,
+                'offset' => 10,  // skip 10 film teratas
+                'limit'  => 20,  // ambil 10 film berikutnya
+            ]);
+
+            $data  = $response->json();
+            $films = $data['data'] ?? [];
+
+            // Renumber rank mulai dari 11
+            foreach ($films as $i => &$film) {
+                $film['rank'] = $i + 11;
+            }
+            unset($film);
+
+        } catch (\Exception $e) {
+            $films = [];
+        }
+
+        return view('rekomendasi.show', compact('films', 'region'));
     }
 }

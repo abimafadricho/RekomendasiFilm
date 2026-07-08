@@ -28,8 +28,8 @@ Route::get('/films/{id}', [FilmController::class, 'detail'])->name('films.detail
 // Halaman Rekomendasi
 Route::middleware('auth.user')->group(function () {
     // Rekomendasi
-    Route::get('/rekomendasi', [RekomendasiController::class, 'index'])->name('rekomendasi.index');
-    Route::get('/rekomendasi/{user_id}', [RekomendasiController::class, 'show'])->name('rekomendasi.show');
+    Route::get('/rekomendasi', [RekomendasiController::class, 'show'])->name('rekomendasi.index');
+    Route::get('/rekomendasi/kandidat', [RekomendasiController::class, 'show'])->name('rekomendasi.show');
  
     // Rating
     Route::post('/rating', [RatingController::class, 'simpan'])->name('rating.simpan');
