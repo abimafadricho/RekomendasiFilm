@@ -16,6 +16,8 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register',[AuthController::class, 'register'])->name('register.post');
 Route::post('/logout',  [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/search', [FilmController::class, 'search'])->name('films.search');
+
 // Halaman Utama - Daftar Film
 Route::get('/', [FilmController::class, 'index'])->name('home');
 Route::get('/films', [FilmController::class, 'index'])->name('films.index');

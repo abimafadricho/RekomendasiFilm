@@ -21,11 +21,11 @@
     <div class="mb-4 d-flex align-items-center gap-3 flex-wrap">
 
     <div class="region-toggle">
-        <a href="{{ route('films.index') }}?region=global"
+        <a href="{{ route('rekomendasi.show') }}?region=global"
            class="region-toggle__option {{ $region === 'global' ? 'is-active' : '' }}">
             <span class="region-toggle__flag">🌍</span> Global
         </a>
-        <a href="{{ route('films.index') }}?region=indonesia"
+        <a href="{{ route('rekomendasi.show') }}?region=indonesia"
            class="region-toggle__option {{ $region === 'indonesia' ? 'is-active' : '' }}">
             <span class="region-toggle__flag">🇮🇩</span> Indonesia
         </a>

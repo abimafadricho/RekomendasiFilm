@@ -71,6 +71,37 @@
     }
 </style>
 
+{{-- Card Evaluasi Model --}}
+@if(isset($metrics) && $metrics)
+<div class="mb-4 p-3 d-flex flex-wrap gap-4 align-items-center"
+     style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px">
+
+    {{-- MAE --}}
+    <div class="text-center px-3 py-2"
+         style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.2);border-radius:10px;min-width:100px">
+        <div style="font-size:1.5rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--accent);line-height:1.2">
+            {{ number_format($metrics['mae'], 4) }}
+        </div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">MAE</div>
+    </div>
+
+    {{-- RMSE --}}
+    <div class="text-center px-3 py-2"
+         style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.2);border-radius:10px;min-width:100px">
+        <div style="font-size:1.5rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--accent);line-height:1.2">
+            {{ number_format($metrics['rmse'], 4) }}
+        </div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">RMSE</div>
+    </div>
+
+    {{-- Penjelasan singkat --}}
+    <div style="font-size:0.78rem;color:var(--text-muted);max-width:300px">
+        Semakin kecil nilai MAE dan RMSE, semakin akurat prediksi rating model ini.
+    </div>
+
+</div>
+@endif
+
 {{-- Info Metode
 <div class="p-3 rounded-3 mb-4 d-flex align-items-center gap-3"
      style="background:var(--bg-elevated);border:1px solid var(--border)">
@@ -175,14 +206,6 @@
             @endif
         </div>
         @endforeach
-    </div>
-
-    {{-- Tombol Rekomendasi --}}
-    <div class="text-center mt-5 pt-3" style="border-top:1px solid var(--border)">
-        <p class="text-muted mb-3">Ingin rekomendasi film yang dipersonalisasi?</p>
-        <a href="{{ route('rekomendasi.index') }}" class="btn btn-accent btn-lg px-5">
-            <i class="bi bi-stars me-2"></i> Dapatkan Rekomendasi Personal
-        </a>
     </div>
 
 @else

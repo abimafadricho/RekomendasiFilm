@@ -277,6 +277,13 @@ resources/views/layouts/app.blade.php
                     </a>
                 </li>
 
+                <li class="nav-item">
+    <a class="nav-link {{ request()->routeIs('films.search') ? 'active' : '' }}"
+       href="{{ route('films.search') }}">
+        <i class="bi bi-search me-1"></i> Cari Film
+    </a>
+</li>
+
                 @if(session('user_id'))
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('rekomendasi.*') ? 'active' : '' }}"
