@@ -71,37 +71,6 @@
     }
 </style>
 
-{{-- Card Evaluasi Model --}}
-@if(isset($metrics) && $metrics)
-<div class="mb-4 p-3 d-flex flex-wrap gap-4 align-items-center"
-     style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px">
-
-    {{-- MAE --}}
-    <div class="text-center px-3 py-2"
-         style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.2);border-radius:10px;min-width:100px">
-        <div style="font-size:1.5rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--accent);line-height:1.2">
-            {{ number_format($metrics['mae'], 4) }}
-        </div>
-        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">MAE</div>
-    </div>
-
-    {{-- RMSE --}}
-    <div class="text-center px-3 py-2"
-         style="background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.2);border-radius:10px;min-width:100px">
-        <div style="font-size:1.5rem;font-weight:800;font-family:'Syne',sans-serif;color:var(--accent);line-height:1.2">
-            {{ number_format($metrics['rmse'], 4) }}
-        </div>
-        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px">RMSE</div>
-    </div>
-
-    {{-- Penjelasan singkat --}}
-    <div style="font-size:0.78rem;color:var(--text-muted);max-width:300px">
-        Semakin kecil nilai MAE dan RMSE, semakin akurat prediksi rating model ini.
-    </div>
-
-</div>
-@endif
-
 {{-- Info Metode
 <div class="p-3 rounded-3 mb-4 d-flex align-items-center gap-3"
      style="background:var(--bg-elevated);border:1px solid var(--border)">
@@ -207,6 +176,53 @@
         </div>
         @endforeach
     </div>
+
+{{-- Tabel Evaluasi Model --}}
+@if(!empty($metrics))
+<div class="mb-4 p-3" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px">
+    <div style="font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text-primary);margin-bottom:0.75rem">
+        <i class="bi bi-graph-up me-1" style="color:var(--accent)"></i>
+        Evaluasi Model IBCF + Timestamp (λ=0.7)
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm" style="color:var(--text-primary)">
+            <thead>
+                <tr style="border-bottom:1px solid var(--border)">
+                    <th>Dataset</th>
+                    <th>Sumber Data</th>
+                    <th>MAE</th>
+                    <th>RMSE</th>
+                    <th>K</th>
+                    <th>Jumlah Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $rows = [
+                        ['label' => 'MovieLens 1M', 'key' => 'global_test',         'sumber' => 'Data uji (test set)'],
+                        ['label' => 'MovieLens 1M', 'key' => 'global_production',    'sumber' => 'Rating pengguna (realtime)'],
+                        ['label' => 'Indonesia',     'key' => 'indonesia_test',       'sumber' => 'Data uji (test set)'],
+                        ['label' => 'Indonesia',     'key' => 'indonesia_production', 'sumber' => 'Rating pengguna (realtime)'],
+                    ];
+                @endphp
+
+                @foreach($rows as $r)
+                    @php $m = $metrics[$r['key']] ?? null; @endphp
+                    <tr style="border-bottom:1px solid var(--border)">
+                        <td>{{ $r['label'] }}</td>
+                        <td>{{ $r['sumber'] }}</td>
+                        <td>{{ $m ? number_format($m['mae'], 4) : '-' }}</td>
+                        <td>{{ $m ? number_format($m['rmse'], 4) : '-' }}</td>
+                        <td>{{ $m['k'] ?? '-' }}</td>
+                        <td>{{ $m ? number_format($m['sample_size']) : 'Belum tersedia' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endif
 
 @else
     <div class="text-center py-5">
