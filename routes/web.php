@@ -37,9 +37,6 @@ Route::middleware('auth.user')->group(function () {
     Route::post('/rating', [RatingController::class, 'simpan'])->name('rating.simpan');
     Route::get('/rating/{user_id}', [RatingController::class, 'riwayat'])->name('rating.riwayat');
 });
-// Rating Film
-Route::post('/rating', [RatingController::class, 'simpan'])->name('rating.simpan');
-Route::get('/rating/{user_id}', [RatingController::class, 'riwayat'])->name('rating.riwayat');
 
 // Dashboard Admin
 Route::prefix('admin')->name('admin.')->group(function () {

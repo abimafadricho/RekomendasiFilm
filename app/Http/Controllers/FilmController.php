@@ -64,14 +64,12 @@ class FilmController extends Controller
             abort(500, 'Gagal menghubungi server');
         }
 
-        // Validasi status di LUAR try-catch di atas, supaya abort(404) tidak
-        // ikut tertangkap oleh catch(\Exception $e) dan berubah jadi 500.
         if (!is_array($data) || ($data['status'] ?? null) !== 'ok') {
             abort(404, 'Film tidak ditemukan');
         }
 
         $film   = $data['data'];
-        $userId = session('user_id', 1);
+        $userId = session('user_id');
         return view('films.detail', compact('film', 'userId'));
     }
 

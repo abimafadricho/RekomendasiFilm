@@ -52,6 +52,7 @@
         @endif
 
         {{-- Form Rating --}}
+        @if($userId)
         <div class="mt-4 p-4 rounded-3" style="background:var(--bg-elevated);border:1px solid var(--border)">
             <h5 style="font-family:'Syne',sans-serif">⭐ Beri Rating Film Ini</h5>
             <form action="{{ route('rating.simpan') }}" method="POST">
@@ -78,6 +79,14 @@
                 </div>
             </form>
         </div>
+        @else
+        <div class="mt-4 p-4 rounded-3 text-center" style="background:var(--bg-elevated);border:1px solid var(--border)">
+            <p class="mb-2" style="color:var(--text-muted)">Silakan masuk untuk memberi rating pada film ini.</p>
+            <a href="{{ route('login') }}" class="btn btn-accent">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+        </div>
+        @endif
     </div>
 </div>
 
